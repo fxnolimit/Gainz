@@ -1,10 +1,13 @@
 
 // define an array to hold our data. Later will be stored on sever
-Workouts = [];
-// mock data
-Workouts.push(new Exercise("Pull-up", 3, 2, "", "hold-it"));
-Workouts.push(new Exercise("Push-up", 5, 10, "", "Tut"));
-Workouts.push(new Exercise("Squat", 2, 25, "", "weighted-vest"));
+var workouts = [Workout];
+var exercises = [Exercise];
+
+$.get('/getData', function(data, status) {
+    var serverData = data;
+    workouts = serverData["workouts"];
+    exercises = serverData["exercises"];
+});
 
 // Now comes the code that must wait to run until the document is fully loaded
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -63,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
      });
 
      document.getElementById("newWorkout").addEventListener("click", function () {
-       
         clear();
      });
 
@@ -80,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });  // end of code that must wait for document to load before running
 
 // our constructor
-function Exercise(title, sets, reps, time, detail) {
+function Exercise(title, sets, reps, time, detail, link) {
     this.title = title;
     this.sets = sets;
     this.reps = reps;
@@ -91,40 +93,59 @@ function Exercise(title, sets, reps, time, detail) {
         this.timed = false;
     }
     this.detail = detail;
+    this.link = link;
+    //this.icon = icon;
 }
 
-function Workout(title) {
-    this.list = [Exercise];
+function Workout(title, details) {
     this.title = title;
+    this.details = details;
+    this.list = [Exercise];  
 }
 
 function mockDisplay(whichElement) {
     whichElement.innerHTML = "";
 
-    Workouts.forEach(function (item, index) {
-        var li = document.createElement('li');
-        whichElement.appendChild(li);
-        li.innerHTML = item.title + ":  " + item.sets + " sets of " + item.reps;
-        
-        li.onmouseover = () => {
-            // I will have a show view that will have details about the exercise
-            //alert(item.detail);
-        };
+    $.get('/getData', function(data, status) {
+        var serverData = data;
+        workouts = serverData["workouts"];
+        exercises = serverData["exercises"];
+    });
+
+    exercises.forEach(function (item, index) {
+        if(item != null) {
+            var li = document.createElement('li');
+            whichElement.appendChild(li);
+            li.innerHTML = item.title + ":  " + item.sets + " sets of " + item.reps;
+            
+            li.onmouseover = () => {
+                // I will have a show view that will have details about the exercise
+                //alert(item.detail);
+            };
+        }
     });
 }
 
 function checkboxDisplay(whichElement) {
     whichElement.innerHTML = "";
 
-    Workouts.forEach(function (item, index) {
-        var li = document.createElement('li');
-        whichElement.appendChild(li);
-        li.innerHTML = "<input type='checkbox' class='checkLi' name="+item.title+"><label for="+item.title+">" +item.title + ":  " + item.sets + " sets of " + item.reps+ "</label><br>";
-        
-        li.onmouseover = () => {
-            // I will have a show view that will have details about the exercise
-            //alert(item.detail);
-        };
+    $.get('/getData', function(data, status) {
+        var serverData = data;
+        workouts = serverData["workouts"];
+        exercises = serverData["exercises"];
+    });
+
+    exercises.forEach(function (item, index) {
+        if(item != null) {
+            var li = document.createElement('li');
+            whichElement.appendChild(li);
+            li.innerHTML = "<input type='checkbox' class='checkLi' name="+item.title+"><label for="+item.title+">" +item.title + ":  " + item.sets + " sets of " + item.reps+ "</label><br>";
+            
+            li.onmouseover = () => {
+                // I will have a show view that will have details about the exercise
+                //alert(item.detail);
+            };
+        }
     });
 }
 
