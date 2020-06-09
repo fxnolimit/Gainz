@@ -28,20 +28,81 @@ function Workout(title, details) {
 var workouts = [Workout];
 var exercises = [Exercise];
 
+function noDuplicateExercise(title){
+  for (var i in exercises){
+    if (exercises[i].title == title){
+      return false;
+    }
+  }
+  return true;
+}
+
+function noDuplicateWorkout(title){
+  for (var i in workouts){
+    if (workouts[i].title == title){
+      return false;
+    }
+  }
+  return true;
+}
+
 exercises.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
 exercises.push(new Exercise("Squat", 2, 25, "", "weighted-vest", ""));
 
 serverData["workouts"] = workouts;
 serverData["exercises"] = exercises;
 
-/* GET page. */
-router.get('/', function(req, res, next) {
-  
-  res.render('index', { title: 'Gainz' }) ;
-});
-
-// get all data
+// GET data
 router.get('/getData', function(req, res, next) {
   res.status(200).json(serverData);
 });
+
+/* GET page. */
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Gainz' }) ;
+});
+
+// Add workout
+
+
+
+// Add exercise
+router.post('/exercise', function(req, res){
+  var obj = JSON.parse(req.body.data);
+  if (noDuplicateExercise(obj.title)){
+    var exercise = new Exercise(obj.title, obj.sets, obj.reps, obj.time, obj.details);
+    exercise.timed = obj.timed;
+    exercises.push(exercise);
+    res.status(200);
+  } else{
+      console.log("DUplicate");
+      res.status(400).send("No duplicate title allowed");
+  }
+});
+
+router.post('/workout', function(req, res){
+  var raw = JSON.parse(req.body.array);
+  var title = req.body.title;
+  if (noDuplicateWorkout(title)){
+    var newWorkout = new Workout(title, "");
+    var array = [Exercise];
+    for(var i in raw) {
+      if (raw[i] != null){
+        var obj = raw[i];
+        var temp = new Exercise(obj.title, obj.sets, obj.reps, obj.time, obj.details);
+        temp.timed = obj.timed;
+        array.push(temp);
+      }
+    }
+    newWorkout.list = array;
+    console.log(newWorkout);
+    workouts.push(newWorkout);
+
+    res.status(200);
+  } else {
+    console.log("DUplicate");
+      res.status(400).send("No duplicate title allowed");
+  }
+});
+
 module.exports = router;
