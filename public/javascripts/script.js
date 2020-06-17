@@ -213,12 +213,30 @@ function displayDaily(whichElement) {
     workouts.forEach(function (item) {
         if(item != null && item.week[today]) { //  && item.week[today] remove it back later, it works so well i thought there was a bug
             var li = document.createElement('li');
-            whichElement.appendChild(li);
-            li.innerHTML = item.title;
+            li.style.whiteSpace = "nowrap";  
+            
+            var p = document.createElement('p');
+            p.innerText = item.title;
+            p.style.display = "inline-block";
+
+            var btn = document.createElement('button');
+            btn.innerHTML = "Completed";
+            btn.style.display = "inline-block";   
+            btn.style.marginLeft = "30px";
+            btn.style.color = "green";
+
+            // unschedule the workout
+            btn.addEventListener("click", function(){
+                alert(item.title);
+            });
+
+            li.appendChild(p);
+            li.appendChild(btn);
+
             // maybe also show deets if you have time, and a link for exercises
-                
+            whichElement.appendChild(li);
             li.onmouseover = () => {
-                // I will have a show view that will have details about the workouts
+                // If time allows I will have a show view that will have details about the workouts 
                 //alert(item.detail);
             };
         }

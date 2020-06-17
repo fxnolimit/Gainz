@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> <%= title %> </title>
@@ -13,7 +12,6 @@
 <body>
     <!-- home -->
     <div data-role="page" id="Home">
-
         <div data-role="header" data-theme='b'>
             <h1> <%= title %> </h1>
             <a href="#Add" data-icon="plus">Add Page</a>
@@ -23,22 +21,19 @@
         </div>
 
         <div data-role="content" data-theme='c'>
-            <h2>Today's workout(s)</h2>
+            <h2>Today's workout</h2>
             <div>
                 <ul id="listUl"></ul>
             </div>
             <a id="scheduleWorkout" href="#Schedule">Schedule a workout</a>
         </div>
-
         <div data-role="footer" data-theme='a'>
             <h1>Copyright Francois Mukaba 2020</h1>
         </div>
-
     </div>
 
     <!-- Add -->
     <div data-role="page" id="Add">
-
         <div data-role="header" data-theme='b'>
             <h1>Add exercise/workout</h1>
             <a href="#Home" data-icon="home">Home page</a>

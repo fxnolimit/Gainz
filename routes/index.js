@@ -53,7 +53,6 @@ exercises.push(new Exercise("Squat", 2, 25, "", "weighted-vest", ""));
 var mock = new Workout("Tuesday Workout", "Upper body work");
 // schedule for today and tomorrow
 mock.week[2] = true;
-mock.week[3] = true;
 mock.list.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
 workouts.push(mock);
 
