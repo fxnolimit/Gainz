@@ -78,7 +78,6 @@ router.post('/', function(req, res) {
       workouts[j].week[today] = false;
     }
   }
-  
 });
 
 // Add exercise
