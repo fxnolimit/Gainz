@@ -227,7 +227,8 @@ function displayDaily(whichElement) {
 
             // unschedule the workout
             btn.addEventListener("click", function(){
-                alert(item.title);
+                
+                console.log(item.title);
             });
 
             li.appendChild(p);
