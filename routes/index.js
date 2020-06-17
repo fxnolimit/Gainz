@@ -21,6 +21,7 @@ function Exercise(title, sets, reps, time, detail, link) {
 
 function Workout(title, details) {
   this.title = title;
+  this.week = [false, false, false, false, false, false, false];
   this.details = details;
   this.list = [Exercise];  
 }
@@ -49,6 +50,13 @@ function noDuplicateWorkout(title){
 exercises.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
 exercises.push(new Exercise("Squat", 2, 25, "", "weighted-vest", ""));
 
+var mock = new Workout("Tuesday Workout", "Upper body work");
+// schedule for today and tomorrow
+mock.week[2] = true;
+mock.week[3] = true;
+mock.list.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
+workouts.push(mock);
+
 serverData["workouts"] = workouts;
 serverData["exercises"] = exercises;
 
@@ -75,9 +83,14 @@ router.post('/exercise', function(req, res){
     exercises.push(exercise);
     res.status(200);
   } else{
-      console.log("DUplicate");
+      console.log("Duplicate");
       res.status(400).send("No duplicate title allowed");
   }
+});
+
+router.post('/schedule', function(req,res){
+  var obj = JSON.parse(req.body.data);
+
 });
 
 router.post('/workout', function(req, res){

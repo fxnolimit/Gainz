@@ -4,8 +4,6 @@ var workouts = [Workout];
 var exercises = [Exercise];
 
 
-
-
 // Now comes the code that must wait to run until the document is fully loaded
 document.addEventListener("DOMContentLoaded", function (event) {
     
@@ -15,24 +13,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         exercises = serverData["exercises"];
         // update the li's on our homepage
         var listUl = document.getElementById("listUl");
-        displayExercise(listUl)
+        displayDaily(listUl)
     });
-
-    // Might not need these at all
-    var listUl = document.getElementById("listUl");
-    displayExercise(listUl);  // call shared code with delete and home
-    listUl = document.getElementById("exerciseList");
-    displayExercise(listUl);
-    listUl = document.getElementById("deleteListUl");
-    checkboxDisplay(listUl);
-    listUl = document.getElementById("scheduleListUl");
-    checkboxWorkouts(listUl);
 
 
     // this will refresh the data each time you navigate back to the Home page
     $(document).on('pagebeforeshow', '#Home', function () {
         let listUl = document.getElementById("listUl");
-        displayExercise(listUl);
+        displayDaily(listUl);
     });
 
     // this will refresh the data each time you navigate back to the Delete page
@@ -46,8 +34,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         displayExercise(listUl);
     });
 
-
-    // this will clear the text boxes  each time you navigate back to the Add page
+    // this will clear the text boxes each time you navigate back to the Add page
     $(document).on('pagebeforeshow', '#Add', function () {
         let listUl = document.getElementById("exerciseList");
         checkboxDisplay(listUl);
@@ -76,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var arrstring = JSON.stringify(array);               
         $.post('/workout', {title: title, array: arrstring });
         window.location.replace("/");
-
     });
 
     // add a button event for adding new exercises
@@ -92,11 +78,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         window.location.replace("/");
      });
 
-     document.getElementById("addWorkout").addEventListener("click", function () {
-        
-        
-        clear();
-     });
 
     // add a button even for deleting exercise
     document.getElementById("delete").addEventListener("click", function () { });
@@ -136,6 +117,7 @@ function Exercise(title, sets, reps, time, detail, link) {
 function Workout(title, details) {
     this.title = title;
     this.details = details;
+    this.week = [false, false, false, false, false, false, false];
     this.list = [Exercise];  
 }
 
@@ -196,6 +178,33 @@ function checkboxDisplay(whichElement) {
         }
     });
 }
+
+function displayDaily(whichElement) {
+    whichElement.innerHTML = "";
+    var date = new Date;
+    var today = date.getDay();
+
+    $.get('/getData', function(data, status) {
+        var serverData = data;
+        workouts = serverData["workouts"];
+        exercises = serverData["exercises"];
+    });
+
+    workouts.forEach(function (item) {
+        if(item != null && item.week[today]) {
+            var li = document.createElement('li');
+            whichElement.appendChild(li);
+            li.innerHTML = item.title;
+            // maybe also show deets if you have time, and a link for exercises
+                
+            li.onmouseover = () => {
+                // I will have a show view that will have details about the workouts
+                //alert(item.detail);
+            };
+        }
+    });
+}
+
 
 function checkboxWorkouts(whichElement) {
     whichElement.innerHTML = "";
