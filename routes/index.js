@@ -89,7 +89,14 @@ router.post('/exercise', function(req, res){
 });
 
 router.post('/schedule', function(req,res){
-  var obj = JSON.parse(req.body.data);
+  console.log("here");
+  var titles = JSON.parse(req.body.titles);
+  var days = JSON.parse(req.body.days);
+
+  console.log(titles);
+  console.log(days);
+  
+
 
 });
 

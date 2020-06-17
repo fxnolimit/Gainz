@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         displayDaily(listUl)
     });
 
-
     // this will refresh the data each time you navigate back to the Home page
     $(document).on('pagebeforeshow', '#Home', function () {
         let listUl = document.getElementById("listUl");
@@ -26,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // this will refresh the data each time you navigate back to the Delete page
     $(document).on('pagebeforeshow', '#Delete', function () {
         let listUl = document.getElementById("deleteListUl");
-        checkboxDisplay(listUl);
+        checkboxExercises(listUl);
     });
 
     $(document).on('pagebeforeshow', '#Edit', function () {
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // this will clear the text boxes each time you navigate back to the Add page
     $(document).on('pagebeforeshow', '#Add', function () {
         let listUl = document.getElementById("exerciseList");
-        checkboxDisplay(listUl);
+        checkboxExercises(listUl);
         clear();
     });
 
@@ -45,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let listUl = document.getElementById("scheduleListUl");
         checkboxWorkouts(listUl);
     });
-    // add a button event for adding new exercises
+    // add a button event for adding new workout
     document.getElementById("addWorkout").addEventListener("click", function () {
         var title = document.getElementById("workoutTitle").value;
         var array = [Exercise];
@@ -78,9 +77,49 @@ document.addEventListener("DOMContentLoaded", function (event) {
         window.location.replace("/");
      });
 
+     // schedule workouts
+     document.getElementById("scheduleBtn").addEventListener("click", function () { 
+        var dayChecks = document.getElementsByClassName("daysOfWeek"); 
+        var workChecks = document.getElementsByClassName("checkboxWorkouts");
+        var days = [];
+        var workoutTitles = [];
+
+        // get days
+        for (var i = 0; i < dayChecks.length; i++) {
+            var item = dayChecks[i];
+            if(item.checked){
+                var d = parseInt(item.id);
+                days.push(d);
+            }
+        }
+        
+      
+        // get workouts
+        for (var i = 0; i < workChecks.length; i++) {
+            var item = workChecks[i];
+            if(item.checked){  
+                workoutTitles.push(item.name);
+            }
+        }   
+
+        if(days.length==0  || workoutTitles.length ==0) {
+            alert("Please choose at least one day and one workout to schedule");
+        }
+        else {
+            var daysJson  = JSON.stringify(days);
+            var titlesJson = JSON.stringify(workoutTitles);
+            clear();          
+            $.post('/schedule', {days: daysJson, titles: titlesJson });
+            window.location.replace("/");
+        }
+     });
+     
+
 
     // add a button even for deleting exercise
-    document.getElementById("delete").addEventListener("click", function () { });
+    document.getElementById("delete").addEventListener("click", function () { 
+
+    });
 
     function clear() {
         document.getElementById("title").value = "";
@@ -91,6 +130,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
         document.getElementById("workoutTitle").value = "";
         //uncheck everything
         var checkboxes = document.getElementsByClassName("checkboxExercises"); 
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
+        checkboxes = document.getElementsByClassName("checkboxWorkouts"); 
         for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = false;
         }
@@ -156,29 +199,6 @@ function displayExercise(whichElement) {
     });
 }
 
-function checkboxDisplay(whichElement) {
-    whichElement.innerHTML = "";
-
-    $.get('/getData', function(data, status) {
-        var serverData = data;
-        workouts = serverData["workouts"];
-        exercises = serverData["exercises"];
-    });
-
-    exercises.forEach(function (item) {
-        if(item != null) {
-            var li = document.createElement('li');
-            whichElement.appendChild(li);
-            li.innerHTML = "<input type='checkbox' class='checkboxExercises' name="+item.title+"><label for="+item.title+">" +item.title + ":  " + item.sets + " sets of " + item.reps+ "</label><br>";
-            
-            li.onmouseover = () => {
-                // I will have a show view that will have details about the exercise
-                //alert(item.detail);
-            };
-        }
-    });
-}
-
 function displayDaily(whichElement) {
     whichElement.innerHTML = "";
     var date = new Date;
@@ -191,7 +211,7 @@ function displayDaily(whichElement) {
     });
 
     workouts.forEach(function (item) {
-        if(item != null && item.week[today]) {
+        if(item != null) { //  && item.week[today] put it back later, it works so well i thought there was a bug
             var li = document.createElement('li');
             whichElement.appendChild(li);
             li.innerHTML = item.title;
@@ -199,6 +219,30 @@ function displayDaily(whichElement) {
                 
             li.onmouseover = () => {
                 // I will have a show view that will have details about the workouts
+                //alert(item.detail);
+            };
+        }
+    });
+}
+
+
+function checkboxExercises(whichElement) {
+    whichElement.innerHTML = "";
+
+    $.get('/getData', function(data, status) {
+        var serverData = data;
+        workouts = serverData["workouts"];
+        exercises = serverData["exercises"];
+    });
+
+    exercises.forEach(function (item) {
+        if(item != null) {
+            var li = document.createElement('li');
+            whichElement.appendChild(li);
+            li.innerHTML = "<input type='checkbox' class='checkboxExercises' name='"+item.title+"'><label for='"+item.title+"'>" +item.title + ":  " + item.sets + " sets of " + item.reps+ "</label><br>";
+            
+            li.onmouseover = () => {
+                // I will have a show view that will have details about the exercise
                 //alert(item.detail);
             };
         }
@@ -219,7 +263,7 @@ function checkboxWorkouts(whichElement) {
         if(item != null) {
             var li = document.createElement('li');
             whichElement.appendChild(li);
-            li.innerHTML = "<input type='checkbox' class='checkboxExercises' name="+item.title+"><label for="+item.title+">" +item.title+ "</label><br>";
+            li.innerHTML = "<input type='checkbox' class='checkboxWorkouts' name='"+item.title+"'><label for='"+item.title+"'>" +item.title+ "</label><br>";
                 
             li.onmouseover = () => {
                 // I will have a show view that will have details about the workouts
