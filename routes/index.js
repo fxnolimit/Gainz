@@ -92,12 +92,18 @@ router.post('/schedule', function(req,res){
   console.log("here");
   var titles = JSON.parse(req.body.titles);
   var days = JSON.parse(req.body.days);
-
-  console.log(titles);
-  console.log(days);
-  
-
-
+  for(var i in titles) {
+    if(titles[i]!=null){
+     for(var j in workouts) {
+       if (workouts[j].title == titles[i]){
+        for (var k in days){
+          workouts[j].week[days[k]] = true;
+        } 
+       }
+     } 
+    }
+  }
+  res.status(200);
 });
 
 router.post('/workout', function(req, res){

@@ -211,7 +211,7 @@ function displayDaily(whichElement) {
     });
 
     workouts.forEach(function (item) {
-        if(item != null) { //  && item.week[today] put it back later, it works so well i thought there was a bug
+        if(item != null && item.week[today]) { //  && item.week[today] remove it back later, it works so well i thought there was a bug
             var li = document.createElement('li');
             whichElement.appendChild(li);
             li.innerHTML = item.title;
