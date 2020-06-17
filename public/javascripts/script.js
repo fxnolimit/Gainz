@@ -44,6 +44,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let listUl = document.getElementById("scheduleListUl");
         checkboxWorkouts(listUl);
     });
+
+    $(document).on('pagebeforeshow', '#Reports', function () {
+        let listUl = document.getElementById("allExercisesListUl");
+        listEditExercises(listUl);
+    });
+
     // add a button event for adding new workout
     document.getElementById("addWorkout").addEventListener("click", function () {
         var title = document.getElementById("workoutTitle").value;
@@ -114,8 +120,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
      });
      
-
-
     // add a button even for deleting exercise
     document.getElementById("delete").addEventListener("click", function () { 
 
@@ -175,7 +179,6 @@ function searchByTitle(title) {
 }
 
 
-
 function displayExercise(whichElement) {
     whichElement.innerHTML = "";
 
@@ -198,6 +201,48 @@ function displayExercise(whichElement) {
         }
     });
 }
+
+function listEditExercises(whichElement) {
+    whichElement.innerHTML = "";
+
+    $.get('/getData', function(data, status) {
+        var serverData = data;
+        workouts = serverData["workouts"];
+        exercises = serverData["exercises"];
+    });
+
+    exercises.forEach(function (item) {
+        if(item != null) {
+            var li = document.createElement('li');
+            
+            li.style.whiteSpace = "nowrap";  
+
+            var btn1 = document.createElement('button');
+            btn1.innerHTML = "Edit";
+            btn1.style.display = "inline-block";   
+            btn1.style.marginLeft = "5px";
+            btn1.style.color = "green";
+            li.appendChild(btn1);
+
+            var btn2 = document.createElement('button');
+            btn2.innerHTML = "Delete";
+            btn2.style.display = "inline-block";   
+            btn2.style.marginLeft = "30px";
+            btn2.style.color = "magenta";
+            li.appendChild(btn2);
+
+            var p = document.createElement('p');
+            p.style.marginLeft = "20px";
+            p.style.display = "inline-block";
+            p.innerText = item.title + ":  " + item.sets + " sets of " + item.reps;
+            li.appendChild(p);
+
+    
+            whichElement.appendChild(li);
+        }
+    });
+}
+
 
 function displayDaily(whichElement) {
     whichElement.innerHTML = "";
@@ -260,12 +305,11 @@ function checkboxExercises(whichElement) {
         if(item != null) {
             var li = document.createElement('li');
             whichElement.appendChild(li);
-            li.innerHTML = "<input type='checkbox' class='checkboxExercises' name='"+item.title+"'><label for='"+item.title+"'>" +item.title + ":  " + item.sets + " sets of " + item.reps+ "</label><br>";
-            
-            li.onmouseover = () => {
-                // I will have a show view that will have details about the exercise
-                //alert(item.detail);
-            };
+            li.innerHTML = "<input type='checkbox' class='checkboxExercises' name='"+item.title+"'><label for='"+item.title+"'>" +item.title + ":  " + item.sets + " sets of " + item.reps+ "</label><br>";       
+            // li.onmouseover = () => {
+            //     // I will have a show view that will have details about the exercise
+            //     //alert(item.detail);
+            // };
         }
     });
 }
@@ -286,10 +330,10 @@ function checkboxWorkouts(whichElement) {
             whichElement.appendChild(li);
             li.innerHTML = "<input type='checkbox' class='checkboxWorkouts' name='"+item.title+"'><label for='"+item.title+"'>" +item.title+ "</label><br>";
                 
-            li.onmouseover = () => {
-                // I will have a show view that will have details about the workouts
-                //alert(item.detail);
-            };
+            // li.onmouseover = () => {
+            //     // I will have a show view that will have details about the workouts
+            //     //alert(item.detail);
+            // };
         }
     });
 }
