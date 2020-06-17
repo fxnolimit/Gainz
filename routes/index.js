@@ -52,7 +52,7 @@ exercises.push(new Exercise("Squat", 2, 25, "", "weighted-vest", ""));
 
 var mock = new Workout("Tuesday Workout", "Upper body work");
 // schedule for today and tomorrow
-mock.week[2] = true;
+mock.week[3] = true;
 mock.list.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
 workouts.push(mock);
 
@@ -69,9 +69,17 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Gainz' }) ;
 });
 
-// Add workout
-
-
+router.post('/', function(req, res) {
+  var title = JSON.parse(req.body.title);
+  for(var j in workouts) {
+    if (workouts[j].title == title){
+      var date = new Date;
+      var today = date.getDay();
+      workouts[j].week[today] = false;
+    }
+  }
+  
+});
 
 // Add exercise
 router.post('/exercise', function(req, res){

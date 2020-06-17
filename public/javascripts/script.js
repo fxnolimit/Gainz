@@ -218,6 +218,7 @@ function displayDaily(whichElement) {
             var p = document.createElement('p');
             p.innerText = item.title;
             p.style.display = "inline-block";
+            
 
             var btn = document.createElement('button');
             btn.innerHTML = "Completed";
@@ -227,8 +228,9 @@ function displayDaily(whichElement) {
 
             // unschedule the workout
             btn.addEventListener("click", function(){
-                
-                console.log(item.title);
+                $.post('/', {title: JSON.stringify(item.title)});
+                //window.location.replace("/");
+                window.location.reload();        
             });
 
             li.appendChild(p);
