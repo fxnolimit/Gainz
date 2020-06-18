@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var workChecks = document.getElementsByClassName("checkboxWorkouts");
         var typedWorkout = document.getElementById("deleteOneWorkout").value;
         var workoutTitles = [];
+       
           // get workouts
         for (var i = 0; i < workChecks.length; i++) {
             var item = workChecks[i];
@@ -96,9 +97,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 workoutTitles.push(item.name);
             }
         }
-        console.log(workoutTitles);
-        console.log(typedWorkout);
-        
+        if( workoutTitles.length == 0 && typedWorkout == "") {
+            alert("Please, type or select a workout.");
+        } else{
+            workoutTitles.push(typedWorkout);
+            clear();
+            var titlesJson = JSON.stringify(workoutTitles);             
+            $.post('/deleteWorkout', {titles: titlesJson });
+            window.location.reload();
+        }        
     });
 
      // schedule workouts
