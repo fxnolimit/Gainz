@@ -223,14 +223,29 @@ function listEditExercises(whichElement) {
             editBtn.innerHTML = "Edit";
             editBtn.style.display = "inline-block";   
             editBtn.style.marginLeft = "5px";
-            editBtn.style.color = "blue";
+            editBtn.addEventListener("click", function(){
+                var remove = false;
+                $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
+                reloadData();
+                window.location.reload();        
+            });editBtn.style.color = "blue";
+
+
             li.appendChild(editBtn);
 
             var deleteBtn = document.createElement('button');
             deleteBtn.innerHTML = "Delete";
             deleteBtn.style.display = "inline-block";   
             deleteBtn.style.marginLeft = "30px";
-            deleteBtn.style.color = "magenta";
+            deleteBtn.style.color = "magenta";           
+            deleteBtn.addEventListener("click", function(){
+                var remove = true;
+                $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
+                reloadData();
+                window.location.reload();        
+            });
+
+
             li.appendChild(deleteBtn);
 
             var p = document.createElement('p');
@@ -239,20 +254,7 @@ function listEditExercises(whichElement) {
             p.innerText = item.title + ":  " + item.sets + " sets of " + item.reps;
             li.appendChild(p);
 
-            editBtn.addEventListener("click", function(){
-                var remove = false;
-                $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
-                reloadData();
-                window.location.reload();        
-            });
-
-            deleteBtn.addEventListener("click", function(){
-                var remove = true;
-                $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
-                reloadData();
-                window.location.reload();        
-            });
-
+          
             whichElement.appendChild(li);
         }
     });

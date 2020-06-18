@@ -143,10 +143,10 @@ router.post('/modifyExercise', function(req, res){
   var title = JSON.parse(req.body.title);
   var remove = JSON.parse(req.body.remove);
   if (title != null) {
-    for(var i in Exercise){
-      if(exercises[i]==title){
-        if(remove){
-          exercises.splice(i);
+    for(var i in exercises){
+      if(exercises[i].title==title){
+        if(remove){    
+          exercises.splice(i,1);
         }else{
           //edit
         }
