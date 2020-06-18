@@ -283,17 +283,16 @@ function displayDaily(whichElement) {
             viewBtn.style.display = "inline-block";   
             viewBtn.style.marginLeft = "5px";
             viewBtn.style.color = "blue";
-
-            // item.title + ":  " + item.sets + " sets of " + item.reps+ 
+            // pop pup important info about workout 
             viewBtn.addEventListener("click", function(){
-                var message = "Title: "+ item.title +"\n--- Excercises ---\n";
+                var message = "Title: "+ item.title +"\n---- Excercises ----\n";
                 
                 console.log(item.list);
                 
                 for(var i = 0; i< item.list.length; i++){
                     var ex = item.list[i];
                     if (ex != null){              
-                        var temp = "\t\t" + ex.title + ": ";
+                        var temp = ex.title + ": ";
                         temp = temp.concat(ex.sets + " sets of "+ ex.reps +"\n")
                         message = message.concat(temp);
                         console.log(message);
