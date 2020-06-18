@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // add a button event for adding new workout
     document.getElementById("addWorkout").addEventListener("click", function () {
         var title = document.getElementById("workoutTitle").value;
+        var detail = document.getElementById("workoutDetails").value;
         var array = [Exercise];
         var checkboxes = document.getElementsByClassName("checkboxExercises"); 
         for (var i = 0; i < checkboxes.length; i++) {
@@ -67,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         clear();
         var arrstring = JSON.stringify(array);               
-        $.post('/workout', {title: title, array: arrstring });
+        $.post('/workout', {title: title, detail: detail , array: arrstring });
         window.location.replace("/");
     });
 
@@ -124,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             clear();
             var titlesJson = JSON.stringify(workoutTitles);             
             $.post('/deleteWorkouts', {titles: titlesJson });
-            window.location.reload();
+            window.location.replace("/");
         }        
     });
 

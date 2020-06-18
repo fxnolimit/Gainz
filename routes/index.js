@@ -116,8 +116,9 @@ router.post('/', function(req, res) {
 router.post('/workout', function(req, res){
   var raw = JSON.parse(req.body.array);
   var title = req.body.title;
+  var detail = req.body.detail;
   if (noDuplicateWorkout(title)){
-    var newWorkout = new Workout(title, "");
+    var newWorkout = new Workout(title, detail);
     var array = [Exercise];
     for(var i in raw) {
       if (raw[i] != null){
