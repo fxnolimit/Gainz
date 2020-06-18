@@ -50,9 +50,9 @@ function noDuplicateWorkout(title){
 exercises.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
 exercises.push(new Exercise("Squat", 2, 25, "", "weighted-vest", ""));
 
-var mock = new Workout("Tuesday Workout", "Upper body work");
-// schedule for today and tomorrow
-mock.week[3] = true;
+var mock = new Workout("Workout example", "scheduled for today");
+// scheduled everyday
+mock.week = [true,true,true,true,true,true,true];
 mock.list.push(new Exercise("Push-up", 5, 10, "", "Tut", ""));
 workouts.push(mock);
 
@@ -78,7 +78,6 @@ router.post('/exercise', function(req, res){
     exercises.push(exercise);
     res.status(200);
   } else{
-      console.log("Duplicate");
       res.status(400).send("No duplicate title allowed");
   }
 });
@@ -129,15 +128,32 @@ router.post('/workout', function(req, res){
       }
     }
     newWorkout.list = array;
-    console.log(newWorkout);
     workouts.push(newWorkout);
 
     res.status(200);
   } else {
-    console.log("Duplicate");
     res.status(400).send("No duplicate title allowed");
   }
 });
+
+// edit workout
+router.post('/editWorkout', function(req, res){
+  var title = JSON.parse(req.body.oldTitle);
+  var newTitle = JSON.parse(req.body.newTitle);
+  var newDetails = JSON.parse(req.body.newDetails);
+  for (var k in workouts){
+    if (workouts[k] != null && workouts[k].title == title){
+       if(newTitle!= ""){
+        workouts[k].title = newTitle;
+       }
+       if (newDetails!= ""){
+        workouts[k].details = newDetails;
+       }
+      }
+    }
+  res.status(200);
+});
+  
 
 // delete or edit exercise
 router.post('/modifyExercise', function(req, res){
@@ -161,7 +177,6 @@ router.post('/modifyExercise', function(req, res){
         if (workouts[i].list[k].title == title){
           if(remove){    
             workouts[i].list.splice(k,1);
-            console.log(workouts[i].list);
           } else {
             // edit
           }   

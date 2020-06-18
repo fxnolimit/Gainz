@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/d942c814-c935-40eb-9ea1-4d9a75eb5823/resourceGroups/gainzapp/providers/Microsoft.Web/sites/gainzapp",
+    "appService.deploySubpath": "."
+}

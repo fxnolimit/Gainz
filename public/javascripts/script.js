@@ -14,7 +14,7 @@ function reloadData() {
     });
 }
 
-// Now comes the code that must wait to run until the document is fully loaded
+
 document.addEventListener("DOMContentLoaded", function (event) { 
     reloadData();
     // this will refresh the data each time you navigate back to the Home page
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     $(document).on('pagebeforeshow', '#Edit', function () {
         let listUl = document.getElementById("editListUl");
-        displayExercise(listUl);
+        displayWorkout(listUl);
     });
 
     // this will clear the text boxes each time you navigate back to the Add page
@@ -83,6 +83,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
         $.post('/exercise', {data: datastring });
         window.location.replace("/");
      });
+
+    document.getElementById("editWorkoutBtn").addEventListener("click", function () { 
+        var title = document.getElementById("editWorkoutTitle");
+        if (title.value == "") {
+            alert ("please enter a title.");
+        } else {
+            var newTitle = prompt("Enter new title (leave empty to keep previous)", "");  
+            var details = prompt("Enter new details (leave empty to keep previous)", "")
+            if(newTitle=="" && details=="") {
+                alert("Your workout was not updated.")
+            } else {  
+                $.post('/editWorkout', {oldTitle: JSON.stringify(title.value), newTitle: JSON.stringify(newTitle), newDetails: JSON.stringify(details)});
+                reloadData();
+                window.location.reload();
+            }
+        }
+    });
 
      // delete workouts
     document.getElementById("deleteBtn").addEventListener("click", function () { 
@@ -165,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
 
     }
-});  // end of code that must wait for document to load before running
+}); 
 
 // our constructor
 function Exercise(title, sets, reps, time, detail, link) {
@@ -273,8 +290,7 @@ function listEditExercises(whichElement) {
                 var remove = true;
                 $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
                 reloadData();
-                window.location.reload();  
-                console.log(exercises[0].list);      
+                window.location.reload();      
             });
 
 
@@ -286,7 +302,6 @@ function listEditExercises(whichElement) {
             p.innerText = item.title + ":  " + item.sets + " sets of " + item.reps;
             li.appendChild(p);
 
-          
             whichElement.appendChild(li);
         }
     });
@@ -317,19 +332,16 @@ function displayDaily(whichElement) {
             // pop pup important info about workout 
             viewBtn.addEventListener("click", function(){
                 var message = "Title: "+ item.title +"\n---- Excercises ----\n";
-                
-                console.log(item.list);
-                
                 for(var i = 0; i< item.list.length; i++){
                     var ex = item.list[i];
                     if (ex != null){              
                         var temp = ex.title + ": ";
                         temp = temp.concat(ex.sets + " sets of "+ ex.reps +"\n")
                         message = message.concat(temp);
-                        console.log(message);
                     }
                 }
-                 alert(message);       
+                message = message.concat("Details: " + item.details);
+                alert(message);       
             });
 
             li.appendChild(viewBtn);
@@ -349,8 +361,6 @@ function displayDaily(whichElement) {
 
             li.appendChild(completedBtn);
 
-            
-
             var p = document.createElement('p');
             p.innerText = item.title;
             p.style.display = "inline-block";
@@ -369,6 +379,36 @@ function displayDaily(whichElement) {
     });
 }
 
+function displayWorkout(whichElement){
+    whichElement.innerHTML = "";
+
+    $.get('/getData', function(data, status) {
+        var serverData = data;
+        workouts = serverData["workouts"];
+        exercises = serverData["exercises"];
+    });
+
+    workouts.sort(function(a, b){
+        if(a == null || b == null){
+            return -1;
+        }
+        var x = a.title.toLowerCase();
+        var y = b.title.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      });
+
+      workouts.forEach(function (item) {
+        if(item != null) {
+            var li = document.createElement('li');
+            whichElement.appendChild(li);
+            li.innerHTML = item.title;       
+        }
+    });
+
+
+}
 
 function checkboxExercises(whichElement) {
     whichElement.innerHTML = "";
