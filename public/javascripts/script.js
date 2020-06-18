@@ -278,10 +278,36 @@ function displayDaily(whichElement) {
             var li = document.createElement('li');
             li.style.whiteSpace = "nowrap";  
 
+            var viewBtn = document.createElement('button');
+            viewBtn.innerHTML = "View";
+            viewBtn.style.display = "inline-block";   
+            viewBtn.style.marginLeft = "5px";
+            viewBtn.style.color = "blue";
+
+            // item.title + ":  " + item.sets + " sets of " + item.reps+ 
+            viewBtn.addEventListener("click", function(){
+                var message = "Title: "+ item.title +"\n--- Excercises ---\n";
+                
+                console.log(item.list);
+                
+                for(var i = 0; i< item.list.length; i++){
+                    var ex = item.list[i];
+                    if (ex != null){              
+                        var temp = "\t\t" + ex.title + ": ";
+                        temp = temp.concat(ex.sets + " sets of "+ ex.reps +"\n")
+                        message = message.concat(temp);
+                        console.log(message);
+                    }
+                }
+                 alert(message);       
+            });
+
+            li.appendChild(viewBtn);
+
             var completedBtn = document.createElement('button');
             completedBtn.innerHTML = "Completed";
             completedBtn.style.display = "inline-block";   
-            completedBtn.style.marginLeft = "5px";
+            completedBtn.style.marginLeft = "30px";
             completedBtn.style.color = "green";
 
             // unschedule the workout
@@ -293,18 +319,7 @@ function displayDaily(whichElement) {
 
             li.appendChild(completedBtn);
 
-            var viewBtn = document.createElement('button');
-            viewBtn.innerHTML = "View";
-            viewBtn.style.display = "inline-block";   
-            viewBtn.style.marginLeft = "30px";
-            viewBtn.style.color = "blue";
-
             
-            viewBtn.addEventListener("click", function(){
-                 alert(item.title);       
-            });
-
-            li.appendChild(viewBtn);
 
             var p = document.createElement('p');
             p.innerText = item.title;
