@@ -15,8 +15,7 @@ function reloadData() {
 }
 
 // Now comes the code that must wait to run until the document is fully loaded
-document.addEventListener("DOMContentLoaded", function (event) {
-    
+document.addEventListener("DOMContentLoaded", function (event) { 
     reloadData();
     // this will refresh the data each time you navigate back to the Home page
     $(document).on('pagebeforeshow', '#Home', function () {
@@ -27,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // this will refresh the data each time you navigate back to the Delete page
     $(document).on('pagebeforeshow', '#Delete', function () {
         let listUl = document.getElementById("deleteListUl");
-        checkboxExercises(listUl);
+        checkboxWorkouts(listUl);
     });
 
     $(document).on('pagebeforeshow', '#Edit', function () {
@@ -85,8 +84,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
         window.location.replace("/");
      });
 
+     // delete workouts
+    document.getElementById("deleteBtn").addEventListener("click", function () { 
+        var workChecks = document.getElementsByClassName("checkboxWorkouts");
+        var typedWorkout = document.getElementById("deleteOneWorkout").value;
+        var workoutTitles = [];
+          // get workouts
+        for (var i = 0; i < workChecks.length; i++) {
+            var item = workChecks[i];
+            if(item.checked){  
+                workoutTitles.push(item.name);
+            }
+        }
+        console.log(workoutTitles);
+        console.log(typedWorkout);
+        
+    });
+
      // schedule workouts
-     document.getElementById("scheduleBtn").addEventListener("click", function () { 
+    document.getElementById("scheduleBtn").addEventListener("click", function () { 
         var dayChecks = document.getElementsByClassName("daysOfWeek"); 
         var workChecks = document.getElementsByClassName("checkboxWorkouts");
         var days = [];
@@ -101,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
         
-      
         // get workouts
         for (var i = 0; i < workChecks.length; i++) {
             var item = workChecks[i];
@@ -121,11 +136,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
             window.location.replace("/");
         }
      });
-     
-    // add a button even for deleting exercise
-    document.getElementById("delete").addEventListener("click", function () { 
-
-    });
 
     function clear() {
         document.getElementById("title").value = "";
