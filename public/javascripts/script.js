@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             } else {  
                 $.post('/editWorkout', {oldTitle: JSON.stringify(title.value), newTitle: JSON.stringify(newTitle), newDetails: JSON.stringify(details)});
                 reloadData();
-                window.location.reload();
+                window.location.replace("/");
             }
         }
     });
