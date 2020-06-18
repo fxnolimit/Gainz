@@ -213,10 +213,20 @@ function listEditExercises(whichElement) {
         exercises = serverData["exercises"];
     });
 
+    exercises.sort(function(a, b){
+        if(a == null || b == null){
+            return -1;
+        }
+        var x = a.title.toLowerCase();
+        var y = b.title.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      });
+
     exercises.forEach(function (item) {
         if(item != null) {
             var li = document.createElement('li');
-            
             li.style.whiteSpace = "nowrap";  
 
             var editBtn = document.createElement('button');
@@ -228,7 +238,8 @@ function listEditExercises(whichElement) {
                 $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
                 reloadData();
                 window.location.reload();        
-            });editBtn.style.color = "blue";
+            });
+            editBtn.style.color = "blue";
 
 
             li.appendChild(editBtn);
