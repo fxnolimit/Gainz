@@ -242,7 +242,8 @@ function listEditExercises(whichElement) {
                 var remove = true;
                 $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
                 reloadData();
-                window.location.reload();        
+                window.location.reload();  
+                console.log(exercises[0].list);      
             });
 
 
@@ -276,27 +277,42 @@ function displayDaily(whichElement) {
         if(item != null && item.week[today]) { //  && item.week[today] remove it back later, it works so well i thought there was a bug
             var li = document.createElement('li');
             li.style.whiteSpace = "nowrap";  
-            
-            var p = document.createElement('p');
-            p.innerText = item.title;
-            p.style.display = "inline-block";
-            
 
-            var btn = document.createElement('button');
-            btn.innerHTML = "Completed";
-            btn.style.display = "inline-block";   
-            btn.style.marginLeft = "30px";
-            btn.style.color = "green";
+            var completedBtn = document.createElement('button');
+            completedBtn.innerHTML = "Completed";
+            completedBtn.style.display = "inline-block";   
+            completedBtn.style.marginLeft = "5px";
+            completedBtn.style.color = "green";
 
             // unschedule the workout
-            btn.addEventListener("click", function(){
+            completedBtn.addEventListener("click", function(){
                 $.post('/', {title: JSON.stringify(item.title)});
                 //window.location.replace("/");
                 window.location.reload();        
             });
 
+            li.appendChild(completedBtn);
+
+            var viewBtn = document.createElement('button');
+            viewBtn.innerHTML = "View";
+            viewBtn.style.display = "inline-block";   
+            viewBtn.style.marginLeft = "30px";
+            viewBtn.style.color = "blue";
+
+            
+            viewBtn.addEventListener("click", function(){
+                 alert(item.title);       
+            });
+
+            li.appendChild(viewBtn);
+
+            var p = document.createElement('p');
+            p.innerText = item.title;
+            p.style.display = "inline-block";
+            p.style.marginLeft = "20px";
+            
             li.appendChild(p);
-            li.appendChild(btn);
+            
 
             // maybe also show deets if you have time, and a link for exercises
             whichElement.appendChild(li);

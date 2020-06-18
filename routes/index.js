@@ -142,19 +142,35 @@ router.post('/workout', function(req, res){
 router.post('/modifyExercise', function(req, res){
   var title = JSON.parse(req.body.title);
   var remove = JSON.parse(req.body.remove);
+  // remove from exercises
   if (title != null) {
     for(var i in exercises){
       if(exercises[i].title==title){
         if(remove){    
           exercises.splice(i,1);
-        }else{
+        } else {
           //edit
         }
       }
     }
-  }
-  res.status(200);
 
+    // remove from workouts
+    for (var i in workouts){  
+      for (var k in workouts[i].list){
+        if (workouts[i].list[k].title == title){
+          if(remove){    
+            workouts[i].list.splice(k,1);
+            console.log(workouts[i].list);
+          } else {
+            // edit
+          }   
+        }
+      }
+    }
+    res.status(200);  
+  } else {
+    res.status(400);
+  } 
 });
 
 module.exports = router;
