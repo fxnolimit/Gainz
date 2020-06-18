@@ -97,13 +97,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 workoutTitles.push(item.name);
             }
         }
-        if( workoutTitles.length == 0 && typedWorkout == "") {
+        if (workChecks.length == 0){
+            alert("You do not have workouts to delete.");
+        }
+        else if(workoutTitles.length == 0 && typedWorkout == "") {
             alert("Please, type or select a workout.");
         } else{
             workoutTitles.push(typedWorkout);
             clear();
             var titlesJson = JSON.stringify(workoutTitles);             
-            $.post('/deleteWorkout', {titles: titlesJson });
+            $.post('/deleteWorkouts', {titles: titlesJson });
             window.location.reload();
         }        
     });

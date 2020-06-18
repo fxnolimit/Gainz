@@ -139,6 +139,7 @@ router.post('/workout', function(req, res){
   }
 });
 
+// delete or edit exercise
 router.post('/modifyExercise', function(req, res){
   var title = JSON.parse(req.body.title);
   var remove = JSON.parse(req.body.remove);
@@ -171,6 +172,19 @@ router.post('/modifyExercise', function(req, res){
   } else {
     res.status(400);
   } 
+});
+
+// delete a workout
+router.post('/deleteWorkouts', function(req, res){
+  var titles = JSON.parse(req.body.titles);
+  for (var i in titles){
+    for (var k in workouts){
+      if (workouts[k] != null && workouts[k].title == titles[i]){
+        workouts.splice(k,1);
+      }
+    }
+  }
+  res.status(200);
 });
 
 module.exports = router;
