@@ -3,10 +3,7 @@
 var workouts = [Workout];
 var exercises = [Exercise];
 
-
-// Now comes the code that must wait to run until the document is fully loaded
-document.addEventListener("DOMContentLoaded", function (event) {
-    
+function reloadData() {
     $.get('/getData', function(data, status) {
         var serverData = data;
         workouts = serverData["workouts"];
@@ -15,7 +12,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var listUl = document.getElementById("listUl");
         displayDaily(listUl)
     });
+}
 
+// Now comes the code that must wait to run until the document is fully loaded
+document.addEventListener("DOMContentLoaded", function (event) {
+    
+    reloadData();
     // this will refresh the data each time you navigate back to the Home page
     $(document).on('pagebeforeshow', '#Home', function () {
         let listUl = document.getElementById("listUl");
@@ -217,19 +219,19 @@ function listEditExercises(whichElement) {
             
             li.style.whiteSpace = "nowrap";  
 
-            var btn1 = document.createElement('button');
-            btn1.innerHTML = "Edit";
-            btn1.style.display = "inline-block";   
-            btn1.style.marginLeft = "5px";
-            btn1.style.color = "green";
-            li.appendChild(btn1);
+            var editBtn = document.createElement('button');
+            editBtn.innerHTML = "Edit";
+            editBtn.style.display = "inline-block";   
+            editBtn.style.marginLeft = "5px";
+            editBtn.style.color = "blue";
+            li.appendChild(editBtn);
 
-            var btn2 = document.createElement('button');
-            btn2.innerHTML = "Delete";
-            btn2.style.display = "inline-block";   
-            btn2.style.marginLeft = "30px";
-            btn2.style.color = "magenta";
-            li.appendChild(btn2);
+            var deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = "Delete";
+            deleteBtn.style.display = "inline-block";   
+            deleteBtn.style.marginLeft = "30px";
+            deleteBtn.style.color = "magenta";
+            li.appendChild(deleteBtn);
 
             var p = document.createElement('p');
             p.style.marginLeft = "20px";
@@ -237,7 +239,20 @@ function listEditExercises(whichElement) {
             p.innerText = item.title + ":  " + item.sets + " sets of " + item.reps;
             li.appendChild(p);
 
-    
+            editBtn.addEventListener("click", function(){
+                var remove = false;
+                $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
+                reloadData();
+                window.location.reload();        
+            });
+
+            deleteBtn.addEventListener("click", function(){
+                var remove = true;
+                $.post('/modifyExercise', {remove:JSON.stringify(remove), title: JSON.stringify(item.title)});
+                reloadData();
+                window.location.reload();        
+            });
+
             whichElement.appendChild(li);
         }
     });

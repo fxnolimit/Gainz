@@ -69,17 +69,6 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Gainz' }) ;
 });
 
-router.post('/', function(req, res) {
-  var title = JSON.parse(req.body.title);
-  for(var j in workouts) {
-    if (workouts[j].title == title){
-      var date = new Date;
-      var today = date.getDay();
-      workouts[j].week[today] = false;
-    }
-  }
-});
-
 // Add exercise
 router.post('/exercise', function(req, res){
   var obj = JSON.parse(req.body.data);
@@ -94,8 +83,8 @@ router.post('/exercise', function(req, res){
   }
 });
 
+//schedule workouts
 router.post('/schedule', function(req,res){
-  console.log("here");
   var titles = JSON.parse(req.body.titles);
   var days = JSON.parse(req.body.days);
   for(var i in titles) {
@@ -112,6 +101,19 @@ router.post('/schedule', function(req,res){
   res.status(200);
 });
 
+//unschedule workout
+router.post('/', function(req, res) {
+  var title = JSON.parse(req.body.title);
+  for(var j in workouts) {
+    if (workouts[j].title == title){
+      var date = new Date;
+      var today = date.getDay();
+      workouts[j].week[today] = false;
+    }
+  }
+});
+
+// add workout
 router.post('/workout', function(req, res){
   var raw = JSON.parse(req.body.array);
   var title = req.body.title;
@@ -132,9 +134,27 @@ router.post('/workout', function(req, res){
 
     res.status(200);
   } else {
-    console.log("DUplicate");
-      res.status(400).send("No duplicate title allowed");
+    console.log("Duplicate");
+    res.status(400).send("No duplicate title allowed");
   }
+});
+
+router.post('/modifyExercise', function(req, res){
+  var title = JSON.parse(req.body.title);
+  var remove = JSON.parse(req.body.remove);
+  if (title != null) {
+    for(var i in Exercise){
+      if(exercises[i]==title){
+        if(remove){
+          exercises.splice(i);
+        }else{
+          //edit
+        }
+      }
+    }
+  }
+  res.status(200);
+
 });
 
 module.exports = router;
