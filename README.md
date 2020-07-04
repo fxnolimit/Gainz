@@ -5,7 +5,7 @@ Need a website to plan you workouts this week? go [here](https://gainzapp.azurew
 
 ### What I learned:
   
-    NodeJS
-    npm
-    Express.JS
+    Node.js (&npm)
+    Azure App services
+    Express.js
     RequireJS
