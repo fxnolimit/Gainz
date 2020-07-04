@@ -7,7 +7,8 @@ PS: Making it better
 ### What I have learned:
   
     Node.js (&npm)
-    Azure App services
+    Azure App service
+    Azure CLI
     Express.js
     RequireJS
     
