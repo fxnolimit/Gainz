@@ -4,7 +4,7 @@ Need a website to plan you workouts this week? go [here](https://gainzapp.azurew
 
 PS: Making it better
 
-### What I learned:
+### What I have learned:
   
     Node.js (&npm)
     Azure App services
